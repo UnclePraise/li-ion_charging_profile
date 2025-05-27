@@ -68,8 +68,5 @@ For a 3.24 kWh battery with charger speeds [0.5, 1.0, 1.5, 2.0] C, the script ge
 - Four individual PDF plots, one for each charger speed.
 - One combined PDF plot comparing all charger speeds.
 
-## License
-This project is licensed under the MIT License. See the `LICENSE` file for details.
-
 ## Contributing
 Contributions are welcome! Please submit a pull request or open an issue for suggestions or bug reports.
