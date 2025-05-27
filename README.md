@@ -34,7 +34,7 @@ This Python script generates charging profiles for a lithium-ion battery with sp
    ```
 
 ## Usage
-1. Ensure the script (`charging_profile.py`) and `requirements.txt` are in the same directory.
+1. Ensure the script (`make_charging_profile.py`) and `requirements.txt` are in the same directory.
 2. Modify the custom parameters in the script (if needed):
    - `BATTERY_CAPACITY`: Battery capacity in kWh (default: 3.24 kWh).
    - `CHARGER_EFFICIENCY`: Charger efficiency (default: 1).
@@ -42,7 +42,7 @@ This Python script generates charging profiles for a lithium-ion battery with sp
    - `CHARGER_SPEEDS`: List of charger speeds in C (default: [0.5, 1.0, 1.5, 2.0]).
 3. Run the script:
    ```bash
-   python charging_profile.py
+   python3 make_charging_profile.py
    ```
 4. Output will be saved in the `charging_profiles` directory:
    - **Lookup Tables**: CSV files in `charging_profiles/lookup_tables/` (e.g., `3.24kWh_charger_0.5C.csv`).
