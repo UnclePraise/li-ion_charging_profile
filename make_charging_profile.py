@@ -12,34 +12,17 @@ config1 = {
     'BATTERY_CAPACITY': 220,
     'CHARGER_EFFICIENCY': 1,
     'CC_FRACTION': 0.80,
-    'INITIAL_SOC': 0.447,
-    'CHARGER_SPEED': 0.25
+    'INITIAL_SOC': 0.54,
+    'MAX_POWER': 53.74,
+    'AVG_POWER': 32.84
 }
 
 # Second configuration
 config2 = {
-    'BATTERY_CAPACITY': 220,
+    'BATTERY_CAPACITY': 230,
     'CHARGER_EFFICIENCY': 1,
     'CC_FRACTION': 0.80,
-    'INITIAL_SOC': 0.458,
-    'CHARGER_SPEED': 0.25
-}
-
-# Third configuration
-config3 = {
-    'BATTERY_CAPACITY': 220,
-    'CHARGER_EFFICIENCY': 1,
-    'CC_FRACTION': 0.80,
-    'INITIAL_SOC': 0.536,
-    'CHARGER_SPEED': 0.25
-}
-
-# Fourth configuration
-config4 = {
-    'BATTERY_CAPACITY': 220,
-    'CHARGER_EFFICIENCY': 1,
-    'CC_FRACTION': 0.75,
-    'INITIAL_SOC': 0.501,
+    'INITIAL_SOC': 0.54,
     'CHARGER_SPEED': 0.25
 }
 
@@ -47,7 +30,8 @@ config4 = {
 all_configs_data = []
 
 # Process each configuration
-for config_num, config in enumerate([config1, config2, config3, config4]):
+for config_num, config in enumerate([config1, config2]):
+    # Set parameters for current configuration
     BATTERY_CAPACITY = config['BATTERY_CAPACITY']
     CHARGER_EFFICIENCY = config['CHARGER_EFFICIENCY']
     CC_FRACTION = config['CC_FRACTION']
@@ -158,12 +142,9 @@ for config_num, config in enumerate([config1, config2, config3, config4]):
             soc = min(soc, 100.0)
             grid_loads.append(grid_load)
             socs.append(soc)
-
-        # Save lookup table with config number in the filename
-        output_file = os.path.join(
-            lookup_tables_dir,
-            f'Config{config_num+1}_{BATTERY_CAPACITY}kWh_charger_{CHARGER_SPEED}C.csv'
-        )
+        
+        # Write to CSV in lookup_tables directory
+        output_file = os.path.join(lookup_tables_dir, f'{BATTERY_CAPACITY}kWh_charger_{CHARGER_SPEED}C.csv')
         with open(output_file, 'w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(['time', 'grid_load', 'soc'])
@@ -192,9 +173,9 @@ for config_num, config in enumerate([config1, config2, config3, config4]):
 
         ax1.legend(loc='upper left')
         ax2.legend(loc='upper right')
-        plt.title(f'Charging Profile for Config {config_num+1}: {BATTERY_CAPACITY} kWh Battery at {CHARGER_SPEED}C')
-        plot_file = os.path.join(plots_dir, f'Config{config_num+1}_{BATTERY_CAPACITY}kWh_charger_{CHARGER_SPEED}C.pdf')
-        plt.savefig(plot_file, bbox_inches='tight')
+        plt.title(f'Charging Profile for {BATTERY_CAPACITY} kWh Battery at {CHARGER_SPEED}C')
+        plot_file = os.path.join(plots_dir, f'{BATTERY_CAPACITY}kWh_charger_{CHARGER_SPEED}C.pdf')
+        plt.savefig(plot_file, bbox_inches='tight')  # Save as PDF
         plt.close()
 
         all_times.append(times)
