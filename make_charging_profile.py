@@ -9,12 +9,11 @@ from itertools import cycle
 
 # First configuration
 config1 = {
-    'BATTERY_CAPACITY': 220,
+    'BATTERY_CAPACITY': 230,
     'CHARGER_EFFICIENCY': 1,
     'CC_FRACTION': 0.80,
-    'INITIAL_SOC': 0.54,
-    'MAX_POWER': 53.74,
-    'AVG_POWER': 32.84
+    'INITIAL_SOC': 0.447,  # Updated INITIAL_SOC
+    'CHARGER_SPEED': 0.20  # Reduced CHARGER_SPEED
 }
 
 # Second configuration
@@ -22,15 +21,33 @@ config2 = {
     'BATTERY_CAPACITY': 230,
     'CHARGER_EFFICIENCY': 1,
     'CC_FRACTION': 0.80,
-    'INITIAL_SOC': 0.54,
-    'CHARGER_SPEED': 0.25
+    'INITIAL_SOC': 0.458,  # Updated INITIAL_SOC
+    'CHARGER_SPEED': 0.20  # Reduced CHARGER_SPEED
+}
+
+# Third configuration
+config3 = {
+    'BATTERY_CAPACITY': 230,
+    'CHARGER_EFFICIENCY': 1,
+    'CC_FRACTION': 0.80,
+    'INITIAL_SOC': 0.536,  # Updated INITIAL_SOC
+    'CHARGER_SPEED': 0.20  # Reduced CHARGER_SPEED
+}
+
+# Fourth configuration
+config4 = {
+    'BATTERY_CAPACITY': 230,
+    'CHARGER_EFFICIENCY': 1,
+    'CC_FRACTION': 0.80,
+    'INITIAL_SOC': 0.5052,  # Updated INITIAL_SOC
+    'CHARGER_SPEED': 0.20  # Reduced CHARGER_SPEED
 }
 
 # Store data for combined overlay plot
 all_configs_data = []
 
 # Process each configuration
-for config_num, config in enumerate([config1, config2]):
+for config_num, config in enumerate([config1, config2, config3, config4]):
     # Set parameters for current configuration
     BATTERY_CAPACITY = config['BATTERY_CAPACITY']
     CHARGER_EFFICIENCY = config['CHARGER_EFFICIENCY']
@@ -93,9 +110,9 @@ for config_num, config in enumerate([config1, config2]):
                 t_hours = t / 60
                 cc_time_hours = cc_time / 60
                 if t < cc_time:
-                    grid_load = cc_power
+                    grid_load = cc_power  # Grid load during CC phase
                 else:
-                    grid_load = cc_power * np.exp(-lambda_current * (t_hours - cc_time_hours))
+                    grid_load = cc_power * np.exp(-lambda_current * (t_hours - cc_time_hours))  # Grid load during CV phase
                 grid_loads.append(grid_load)
 
             total_energy = sum(grid_loads) / 60
@@ -144,7 +161,7 @@ for config_num, config in enumerate([config1, config2]):
             socs.append(soc)
         
         # Write to CSV in lookup_tables directory
-        output_file = os.path.join(lookup_tables_dir, f'{BATTERY_CAPACITY}kWh_charger_{CHARGER_SPEED}C.csv')
+        output_file = os.path.join(lookup_tables_dir, f'Config{config_num+1}_{BATTERY_CAPACITY}kWh_charger_{CHARGER_SPEED}C.csv')
         with open(output_file, 'w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(['time', 'grid_load', 'soc'])
@@ -173,8 +190,8 @@ for config_num, config in enumerate([config1, config2]):
 
         ax1.legend(loc='upper left')
         ax2.legend(loc='upper right')
-        plt.title(f'Charging Profile for {BATTERY_CAPACITY} kWh Battery at {CHARGER_SPEED}C')
-        plot_file = os.path.join(plots_dir, f'{BATTERY_CAPACITY}kWh_charger_{CHARGER_SPEED}C.pdf')
+        plt.title(f'Charging Profile for Config{config_num+1} {BATTERY_CAPACITY} kWh Battery at {CHARGER_SPEED}C')
+        plot_file = os.path.join(plots_dir, f'Config{config_num+1}_{BATTERY_CAPACITY}kWh_charger_{CHARGER_SPEED}C.pdf')
         plt.savefig(plot_file, bbox_inches='tight')  # Save as PDF
         plt.close()
 
